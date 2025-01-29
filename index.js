@@ -16,7 +16,7 @@ require('dotenv').config();
     const schema=new mongoos.Schema({
         name:String,
         email:String,
-        number:Number
+        number:String
     })
 
     const user=new mongoos.model("detail",schema)
@@ -25,51 +25,30 @@ app.use(express.json())
 app.use(cors())
 const port =process.env.port||7000
 app.use(async(req,res,next)=>{
-    const {name}= await req.body
-    console.log(name)
+    const {name,email,number}=req.body
+    console.log(req.body)
     try {
-        const nameExists = await user.findOne({ name });
-        if (nameExists) {
-          return res.status(400).json("Name already exists");
+        const nameExists = await user.findOne({ name:name.trim() });
+        const emailExists = await user.findOne({ email:email.trim() });
+        const numberExists = await user.findOne({ number:String(number) });
+
+        if (!nameExists&&!emailExists&&!numberExists) {
+            console.log("name=",nameExists,emailExists,numberExists)
+          return res.status(200).json("Registered");
+        
+        }else{
+            return res.json("Already exists")
         }
-        next();
+        
       } catch (e) {
         console.log(e.message);
         res.status(500).json("Internal Server Error");
+      }finally{
+        next()
       }
+      
     
 })
-app.use(async(req,res,next)=>{
-    const {email}= await req.body
-    console.log(email)
-    try {
-        const emailExists = await user.findOne({ email });
-        if (emailExists) {
-          return res.status(400).json("email already exists");
-        }
-        next();
-      } catch (e) {
-        console.log(e.message);
-        res.status(500).json("Internal Server Error");
-      }
-   
-})
-app.use(async(req,res,next)=>{
-    const {number}= await req.body
-    console.log(number)
-    try {
-        const numberExists = await user.findOne({ number });
-        if (numberExists) {
-          return res.status(400).json("number already exists");
-        }
-        next();
-      } catch (e) {
-        console.log(e.message);
-        res.status(500).json("Internal Server Error");
-      }
-
-})
-
 app.get("/",async(req,res)=>{
     res.send("<h1>Hello world<h1/>")
 })
