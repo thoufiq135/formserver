@@ -1,8 +1,10 @@
 const express= require("express")
 const app=express()
+
 const cors=require("cors")
 const mongoos=require("mongoose")
 const uri="mongodb://127.0.0.1:27017/user"
+require('dotenv').config();
 
     mongoos.connect(uri).then(()=>{
         console.log("connected to mongoos...")
@@ -21,7 +23,7 @@ const uri="mongodb://127.0.0.1:27017/user"
 cors.config
 app.use(express.json())
 app.use(cors())
-const port =7000
+const port =process.env.port||7000
 app.use(async(req,res,next)=>{
     const {name}= await req.body
     console.log(name)
