@@ -3,7 +3,7 @@ const app=express()
 
 const cors=require("cors")
 const mongoos=require("mongoose")
-const uri="mongodb://127.0.0.1:27017/user"
+const uri="mongodb+srv://thoufiq:Shaik13579@cluster0.3g7bd.mongodb.net/user?retryWrites=true&w=majority&appName=Cluster0"
 require('dotenv').config();
 
     mongoos.connect(uri).then(()=>{
@@ -20,7 +20,7 @@ require('dotenv').config();
     })
 
     const user=new mongoos.model("detail",schema)
-cors.config
+
 app.use(express.json())
 app.use(cors())
 const port =process.env.port||7000
@@ -74,7 +74,7 @@ app.get("/",async(req,res)=>{
     res.send("<h1>Hello world<h1/>")
 })
 app.post("/add",async(req,res)=>{
-    res.send("<h1>Hello world add<h1/>")
+
     const {name,email,number}=req.body
    await user.insertMany({"name":name,"email":email,"number":number})
    res.status(200)
