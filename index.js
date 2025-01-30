@@ -28,8 +28,8 @@ app.use(async(req,res,next)=>{
     const {name,email,number}=req.body
     console.log(req.body)
     try {
-        const nameExists = await user.findOne({ name:name.trim() });
-        const emailExists = await user.findOne({ email:email.trim() });
+        const nameExists = await user.findOne({ name:name });
+        const emailExists = await user.findOne({ email:email });
         const numberExists = await user.findOne({ number:String(number) });
 
         if (!nameExists&&!emailExists&&!numberExists) {
